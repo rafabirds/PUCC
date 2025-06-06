@@ -1,0 +1,127 @@
+CREATE DATABASE atividade_3_r;
+USE atividade_3_r;
+
+-- 1ª Etapa: Criação de Tabelas (adaptar ao seu nome)
+CREATE TABLE tutores_r (
+id_tutor_r INT PRIMARY KEY,
+nome_r VARCHAR(100),
+telefone_r VARCHAR(15),
+email_r VARCHAR(100),
+endereco_r VARCHAR(150)
+);
+CREATE TABLE animais_r (
+id_animal_r INT PRIMARY KEY,
+nome_r VARCHAR(50),
+especie_r VARCHAR(30),
+raca_r VARCHAR(50),
+idade_r INT,
+peso_r DECIMAL(5,2),
+sexo_r CHAR(1),
+id_tutor_r INT,
+FOREIGN KEY (id_tutor_r) REFERENCES tutores_r(id_tutor_r)
+);
+CREATE TABLE consultas_r (
+id_consulta_r INT PRIMARY KEY,
+id_animal_r INT,
+data_consulta_r DATE,
+procedimento_r VARCHAR(100),
+valor_r DECIMAL(10,2),
+retorno_r BOOLEAN,
+FOREIGN KEY (id_animal_r) REFERENCES animais_r(id_animal_r)
+);
+-- 2ª Etapa: Inserção de Dados
+INSERT INTO tutores_r (id_tutor_r, nome_r, telefone_r, email_r, endereco_r) VALUES
+(1, 'Carlos Mendes', '11999887766', 'carlos@email.com', 'Rua das Flores, 123'),
+(2, 'Ana Lúcia', '11988776655', 'ana@email.com', 'Av. Central, 456'),
+(3, 'Juliana Silva', '11977665544', 'juliana@email.com', 'Rua Verde, 789'),
+(4, 'Roberto Nunes', '11966554433', 'roberto@email.com', 'Travessa Sol, 321'),
+(5, 'Fernanda Dias', '11955443322', 'fernanda@email.com', 'Alameda Azul, 852');
+INSERT INTO animais_r (id_animal_r, nome_r, especie_r, raca_r, idade_r, peso_r, sexo_r, id_tutor_r) VALUES
+(1, 'Toby', 'Cão', 'Labrador', 5, 28.5, 'M', 1),
+(2, 'Mimi', 'Gato', 'Persa', 3, 4.2, 'F', 2),
+(3, 'Rex', 'Cão', 'Vira-lata', 2, 12.7, 'M', 1),
+(4, 'Luna', 'Gato', 'Siamês', 4, 5.1, 'F', 3),
+(5, 'Bolinha', 'Cão', 'Poodle', 10, 7.8, 'F', 4),
+(6, 'Thor', 'Cão', 'Husky', 6, 32.0, 'M', 5),
+(7, 'Nina', 'Gato', 'Maine Coon', 2, 6.9, 'F', 3),
+(8, 'Max', 'Cão', 'Bulldog', 4, 24.0, 'M', 4),
+(9, 'Mel', 'Gato', 'SRD', 1, 3.5, 'F', 5),
+(10, 'Bob', 'Cão', 'Beagle', 3, 10.2, 'M', 2);
+INSERT INTO consultas_r (id_consulta_r, id_animal_r, data_consulta_r, procedimento_r, valor_r, retorno_r) VALUES
+(1, 1, '2024-12-10', 'Vacinação Antirrábica', 80.0, False),
+(2, 2, '2024-12-15', 'Consulta Rotina', 120.0, True),
+(3, 3, '2025-01-10', 'Tratamento de pele', 200.0, False),
+(4, 1, '2025-02-05', 'Retorno Vacinação', 0.0, False),
+(5, 4, '2025-02-20', 'Exame de sangue', 150.0, True),
+(6, 5, '2025-03-01', 'Consulta geriátrica', 160.0, True),
+(7, 6, '2025-03-15', 'Cirurgia ortopédica', 800.0, False),
+(8, 7, '2025-04-02', 'Tratamento vermífugo', 95.0, False),
+(9, 8, '2025-04-10', 'Check-up', 180.0, True),
+(10, 9, '2025-04-20', 'Consulta Rotina', 110.0, False),
+(11, 10, '2025-04-25', 'Vacinação múltipla', 90.0, True),
+(12, 2, '2025-05-05', 'Retorno Consulta', 0.0, False);
+
+-- EX1
+UPDATE animais_r 
+SET peso_r = 33.5 
+WHERE nome_r = 'Thor';
+    
+-- EX2
+DELETE FROM consultas_r
+WHERE id_consulta_r = 6;
+    
+-- EX3
+SELECT animais_r.nome_r AS Nome_animal, tutores_r.nome_r AS Nome_tutor
+FROM animais_r
+JOIN tutores_r
+ON animais_r.id_tutor_r = tutores_r.id_tutor_r;
+
+-- EX4
+SELECT nome_r AS Nome, especie_r AS Especie, peso_r AS Peso
+FROM animais_r
+WHERE peso_r > 25;
+
+-- EX5
+UPDATE consultas_r con
+JOIN animais_r ani
+ON con.id_animal_r = ani.id_animal_r
+SET retorno_r = True
+WHERE ani.nome_r = 'Mimi';
+
+-- EX6 #Esse exercício poderia ser resolvido retirando a foreign key e adicionando depois novamente,
+-- ou também desativando a checagem de foreign keys temporariamente, mas fiz desse jeito pois ficou mais eficiente.
+DELETE consultas_r FROM consultas_r
+JOIN animais_r ON consultas_r.id_animal_r = animais_r.id_animal_r
+JOIN tutores_r ON animais_r.id_tutor_r = tutores_r.id_tutor_r
+WHERE tutores_r.nome_r = 'Juliana Silva';
+
+DELETE animais_r FROM animais_r
+JOIN tutores_r ON animais_r.id_tutor_r = tutores_r.id_tutor_r
+WHERE tutores_r.nome_r = 'Juliana Silva';
+SELECT * FROM tutores_r;
+
+-- EX7
+SELECT animais_r.nome_r AS Nome_animal, SUM(consultas_r.valor_r) AS Valor_total_gasto
+FROM animais_r
+JOIN consultas_r
+ON animais_r.id_animal_r = consultas_r.id_animal_r
+GROUP BY animais_r.nome_r;
+
+-- EX8
+SELECT tutores_r.nome_r AS Nome_tutor, COUNT(id_animal_r) AS Numero_animais
+FROM tutores_r
+JOIN animais_r
+ON tutores_r.id_tutor_r = animais_r.id_tutor_r
+GROUP BY tutores_r.nome_r;
+    
+-- EX9
+UPDATE animais_r
+SET idade_r = idade_r + 1
+WHERE especie_r = 'Cão';
+        
+-- EX10
+SELECT animais_r.nome_r AS Nome_animal, consultas_r.data_consulta_r AS Data_consulta
+FROM consultas_r
+JOIN animais_r
+ON consultas_r.id_animal_r = animais_r.id_animal_r
+WHERE  animais_r.especie_r = 'Gato';
