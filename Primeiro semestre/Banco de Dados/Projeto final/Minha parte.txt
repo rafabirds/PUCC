@@ -1,0 +1,23 @@
+Olá meu nome é Rafael, e hoje nós estamos aqui para apresentar o nosso projeto final da matéria de
+EXPERIMENTOS PRÁTICOS DE BANCO DE DADOS do primeiro semestre.
+O nosso projeto possui essas 5 tabelas diferentes: Artesões, Produtos, Clientes, Venda, e Itens venda
+Nesse slide, pode-se observar as tabelas e suas respectivas colunas.
+
+Começando por artesões, a sua função é armazenar os dados de cadastro dos diversos artesões que trabalham na loja,
+e para isso, criamos essa tabela em que as linhas significam um artesão, as colunas as diferentes informações.
+
+- Sendo essas colunas ID_Artesão, que é um número inteiro de identificação único com AUTO INCREMENT para cada artesão, que serve para identificar o trabalhador com precisão. Além disso, essa coluna é posteriormente
+referenciada como uma FOREIGN KEY na tabela Produtos.
+
+- Outra coluna é a Nome, que guarda o nome completo do artesão e não pode ser nula.
+
+- A coluna Contato guarda o número de telefone do artesão como uma VARCHAR, pois é utilizado apenas pra consulta, e também é necessário para a utilização de caracteres especiais, como nesse caso, o parênteses do DDD.
+
+- A coluna Endereço guarda o endereço do artesão, sendo o nome da rua, número, cidade e estado.
+
+- A coluna Tipo_Artesanato guarda o tipo de artesanato que o artesão produz, sendo eles Cerâmica, Madeira, Couro
+e outros.
+
+- E por fim, a coluna Data_Cadastro, que guarda a data exata do dia que o artesão se cadastrou no sistema.
+
+Bom, e essa foi a nossa apresentação do Trabalho Final de Banco de Dados, muito obrigado!
